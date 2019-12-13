@@ -1,10 +1,14 @@
 package com.github.mrnerdy42.keywizard.gui;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.github.mrnerdy42.keywizard.util.KeybindUtils;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
@@ -30,11 +34,6 @@ public class GuiBindingList extends GuiScrollingList {
 		this.searchText = this.parent.getSearchText();
 		this.selectedCategory = this.parent.getSelectedCategory();
 		this.selectKeybind(0);
-	}
-
-	@Override
-	protected int getSize() {
-		return bindings.length;
 	}
 
 	@Override
@@ -71,6 +70,30 @@ public class GuiBindingList extends GuiScrollingList {
 	    //int len = (I18n.format("gui.key")+": ").length() * 5;
 		//fontRender.drawStringWithShadow(I18n.format("gui.key")+": ", this.left + 3 , slotTop + fontRender.FONT_HEIGHT * 2 + 3, 0x999999);
 		fontRender.drawStringWithShadow(currentBinding.getDisplayName(), this.left + 3, slotTop + fontRender.FONT_HEIGHT * 2 + 3, color);
+	}
+	
+	@Override
+	public void handleMouseInput(int mouseX, int mouseY) throws IOException {
+		super.handleMouseInput(mouseX, mouseY);
+		
+        int listLength     = this.getSize();
+        int scrollBarWidth = 6;
+        int scrollBarRight = this.left + this.listWidth;
+        int scrollBarLeft  = scrollBarRight - scrollBarWidth;
+        int entryLeft      = this.left;
+        int entryRight     = scrollBarLeft - 1;
+        int border         = 4;
+        int mouseListY = mouseY - this.top + (int)this.getScrollDistance() - border;
+        int slotIndex = mouseListY / this.slotHeight;
+
+        if (mouseX >= entryLeft && mouseX <= entryRight && slotIndex >= 0 && mouseListY >= 0 && slotIndex < listLength) {
+        	ArrayList<String> text = new ArrayList<String>(1);
+        	text.add(this.bindings[slotIndex].getKeyDescription());
+        	System.out.println(text);
+        	net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(text,mouseX, mouseY, this.parent.width, this.parent.height, -1, this.parent.getFontRenderer());
+		    GlStateManager.disableLighting();
+            GlStateManager.disableDepth();
+        }
 	}
 	
 	protected void updateList(){
@@ -137,6 +160,29 @@ public class GuiBindingList extends GuiScrollingList {
 	
 	public KeyBinding getSelectedKeybind(){
 		return this.selectedKeybind;
+	}
+	
+	@Override
+	protected int getSize() {
+		return bindings.length;
+	}
+	
+	protected float getScrollDistance() {
+		try {
+			Class<?> clazz = this.getClass().getSuperclass();
+			Field scrollDistance = clazz.getDeclaredField("scrollDistance");
+			scrollDistance.setAccessible(true);
+			return scrollDistance.getFloat(this);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return -1.0f;
 	}
 
 }
