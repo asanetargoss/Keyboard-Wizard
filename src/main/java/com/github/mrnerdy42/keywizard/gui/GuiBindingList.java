@@ -3,6 +3,7 @@ package com.github.mrnerdy42.keywizard.gui;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import com.github.mrnerdy42.keywizard.util.KeybindUtils;
 
@@ -85,7 +86,7 @@ public class GuiBindingList extends GuiScrollingList {
 			this.searchText = this.parent.getSearchText();
 			this.selectedCategory = this.parent.getSelectedCategory();
 
-			String filterExp = "(?i).*" + this.searchText + ".*";
+			String filterExp = "(?i).*" + Pattern.quote(this.searchText) + ".*";
 			
 			if (this.searchText.equals("")) {
 				this.filtered = false;
