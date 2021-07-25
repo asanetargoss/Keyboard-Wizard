@@ -1,4 +1,3 @@
 # Keyboard-Wizard
-This is the new repo for my Minecraft mod Keyboard Wizard, a tool to make finding and fixing keybinding conflicts a lot easier.
 
-I decided to create an entirely new repo for Keyboard Wizard after I screwed up the history of the old one.
+This is a 1.10 maintenance branch of the Minecraft mod Keyboard Wizard, a tool to make finding and fixing keybinding conflicts easier.
