@@ -85,9 +85,9 @@ public class GuiKeyWizard extends GuiScreen {
 		int bindingListWidth = (maxBindingLength * 11);
 	
 		this.bindingList = new GuiBindingList(this, 10, this.height - 30, bindingListWidth, this.height - 40,
-				fontRenderer.FONT_HEIGHT * 3 + 10);
+				fontRendererObj.FONT_HEIGHT * 3 + 10);
 		
-		this.searchBar = new GuiTextField(0, this.fontRenderer, 10, this.height - 20, bindingListWidth, 14);
+		this.searchBar = new GuiTextField(0, this.fontRendererObj, 10, this.height - 20, bindingListWidth, 14);
 		this.searchBar.setFocused(true);
 		this.searchBar.setCanLoseFocus(false);
 	
@@ -143,7 +143,7 @@ public class GuiKeyWizard extends GuiScreen {
 		this.searchBar.drawTextBox();
 		
 		this.keyboard.draw(this.mc, mouseX, mouseY, partialTicks);
-		this.categoryList.drawButton(this.mc, mouseX, mouseY, partialTicks);
+		this.categoryList.drawButton(this.mc, mouseX, mouseY);
 	}
 
 	@Override
@@ -332,7 +332,7 @@ public class GuiKeyWizard extends GuiScreen {
 	}
 
 	public FontRenderer getFontRenderer() {
-		return this.fontRenderer;
+		return this.fontRendererObj;
 	}
 	
 	public String getSearchText() {

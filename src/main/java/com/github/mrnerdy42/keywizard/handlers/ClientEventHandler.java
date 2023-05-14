@@ -39,13 +39,13 @@ public class ClientEventHandler {
     		for(GuiButton b: e.getButtonList()) {
     			if(b.id == 200) { // Done
     				b.width = 100;
-    				b.x = width / 2 + 60;
+    				b.xPosition = width / 2 + 60;
     				
-    				buttonY = b.y;
+    				buttonY = b.yPosition;
     			}
     			if(b.id == 201) { // Reset All
     				b.width = 100;
-    				b.x = width / 2 - 160;
+    				b.xPosition = width / 2 - 160;
     			}
     		}
     		e.getButtonList().add(new GuiButton(203, width / 2 - 50, buttonY, 100, 20, I18n.format("gui.openKeyWiz")));

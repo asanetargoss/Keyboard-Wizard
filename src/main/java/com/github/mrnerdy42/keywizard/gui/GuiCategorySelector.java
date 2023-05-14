@@ -86,20 +86,20 @@ public class GuiCategorySelector extends GuiButton{
 	}
 	
 	@Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks){
+    public void drawButton(Minecraft mc, int mouseX, int mouseY){
 		//this.zLevel = 1;
         if (this.visible)
         {
-            FontRenderer fontrenderer = mc.fontRenderer;
+            FontRenderer fontrenderer = mc.fontRendererObj;
             mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+            this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             int i = this.getShadingMultiplier(this.hovered);
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            this.drawTexturedModalRect(this.x, this.y, 0, 46 + i * 20, this.width / 2, this.height);
-            this.drawTexturedModalRect(this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
+            this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + i * 20, this.width / 2, this.height);
+            this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
             this.mouseDragged(mc, mouseX, mouseY);
             int j = 0xE0E0E0;
 
@@ -113,10 +113,12 @@ public class GuiCategorySelector extends GuiButton{
             }
             
 
-            this.drawCenteredString(fontrenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, j);
+            this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, j);
             
     		if (this.extended) {
-    		    this.list.drawScreen(mouseX, mouseY, partialTicks);
+    		    // HACK: 1.10.2 does not pass partialTicks to drawButton (however, partialTicks appears unused by drawScreen, so no harm done)
+    		    //this.list.drawScreen(mouseX, mouseY, partialTicks);
+    		    this.list.drawScreen(mouseX, mouseY, 1);
     		}
         }
 
@@ -144,7 +146,7 @@ public class GuiCategorySelector extends GuiButton{
     }
     
     public void mouseClicked(Minecraft mc, int mouseX, int mouseY, int button) {
-    	if (mouseX >= this.x && mouseX < this.x + this.width && mouseY >= this.y && mouseY < this.y + this.height && button == 0) {
+    	if (mouseX >= this.xPosition && mouseX < this.xPosition + this.width && mouseY >= this.yPosition && mouseY < this.yPosition + this.height && button == 0) {
             this.playPressSound(mc.getSoundHandler());
     		this.setState(!this.extended);
     	} else if (!(mouseX >= list.getLeft() && mouseX < list.getLeft() + list.getListWidth() && mouseY >= list.getTop() && mouseY < list.getTop() + list.getListHeight()) && button == 0) {
